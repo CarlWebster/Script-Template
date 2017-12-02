@@ -4613,7 +4613,9 @@ Function ProcessAutoFitHorizontalTable
 	ElseIf($Text)
 	{
 		Write-Verbose "$(Get-Date): `t`tProcessing services information"
+		Line 0 "Example of AutoFit Horizontal Table"
 		Line 0 "Services"
+		Line 0 ""
 	}
 	ElseIf($HTML)
 	{
@@ -4641,7 +4643,7 @@ Function OutputAutoFitHorizontalTable
 	
 	If($MSWord -or $PDF)
 	{
-		WriteWordLine 0 1 "Services ($($NumServices) Services found)"
+		WriteWordLine 0 1 "Services ($NumServices Services found)"
 
 		## IB - replacement Services table generation utilising AddWordTable function
 
@@ -4811,7 +4813,7 @@ Function OutputAutoFitHorizontalTableNoGridLines
 		$Script:Selection.InsertNewPage()
 		WriteWordLine 1 0 "Example of AutoFit Horizontal Table with no Grid Lines"
 		WriteWordLine 3 0 "Services"
-		WriteWordLine 0 1 "Services ($($NumServices) Services found)"
+		WriteWordLine 0 1 "Services ($NumServices Services found)"
 
 		## IB - replacement Services table generation utilising AddWordTable function
 
@@ -4878,7 +4880,10 @@ Function ProcessFixedWidthHorizontalTable
 	}
 	ElseIf($Text)
 	{
-		#there is no example of this for the text option
+		Write-Verbose "$(Get-Date): `t`tProcessing services information for Fixed Width Horizontal Table"
+		Line 0 "Example of Text Fixed Width Horizontal Table"
+		Line 0 "Services"
+		Line 0 ""
 	}
 	ElseIf($HTML)
 	{
@@ -4893,7 +4898,7 @@ Function OutputFixedWidthHorizontalTable
 	
 	If($MSWord -or $PDF)
 	{
-		WriteWordLine 0 1 "Services ($($NumServices) Services found)"
+		WriteWordLine 0 1 "Services ($NumServices Services found)"
 
 		## IB - replacement Services table generation utilising AddWordTable function
 
@@ -4906,7 +4911,20 @@ Function OutputFixedWidthHorizontalTable
 	}
 	ElseIf($Text)
 	{
-		#there is no example of this for the text option
+		[int]$MaxDisplayNameLength = ($Services.DisplayName | Measure-Object -Maximum -Property Length).Maximum
+		Line 0 "Services ($NumServices Services found)"
+		Line 0 ""
+		If($MaxDisplayNameLength -gt 12) #12 is length of "Display Name"
+		{
+			#10 is length of "Display Name" minus 2 to allow for spacing between columns
+			Line 0 ("Display Name" + (' ' * ($MaxDisplayNameLength - 10))) -NoNewLine
+		}
+		Else
+		{
+			Line 0 "Display Name " -NoNewLine
+		}
+		Line 0 "Status  " -NoNewLine
+		Line 0 "Startup Type"
 	}
 	ElseIf($HTML)
 	{
@@ -4931,6 +4949,18 @@ Function OutputFixedWidthHorizontalTable
 		}
 		ElseIf($Text)
 		{
+			If(($Service.DisplayName).Length -lt ($MaxDisplayNameLength))
+			{
+				[int]$NumOfSpaces = (($MaxDisplayNameLength) - ($Service.DisplayName.Length)) + 2 #+2 to allow for column spacing
+				$tmp1 = ($($Service.DisplayName) + (' ' * $NumOfSPaces))
+				Line 0 $tmp1 -NoNewLine
+			}
+			Else
+			{
+				Line 0 "$($Service.DisplayName)  " -NoNewLine
+			}
+			Line 0 "$($Service.State) " -NoNewLine
+			Line 0 $Service.StartMode
 		}
 		ElseIf($HTML)
 		{
@@ -4965,6 +4995,7 @@ Function OutputFixedWidthHorizontalTable
 	}
 	ElseIf($Text)
 	{
+		Line 0 ""
 	}
 	ElseIf($HTML)
 	{
