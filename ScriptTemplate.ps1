@@ -5,9 +5,11 @@
 
 <#
 .SYNOPSIS
-	Demonstrates script functionality using Microsoft Word, PDF, formatted text or HTML.
+	Demonstrates script functionality using Microsoft Word, PDF, formatted text or 
+	HTML.
 .DESCRIPTION
-	Creates a sample report of various Word functionality using Microsoft Word, PDF, formatted text, HTML and PowerShell.
+	Creates a sample report of various Word functionality using Microsoft Word, PDF, 
+	formatted text, HTML and PowerShell.
 	Creates a document named Script_Template.docx (or .PDF or .TXT or .HTML).
 	Word and PDF documents include a Cover Page, Table of Contents and Footer.
 	Includes support for the following language versions of Microsoft Word:
@@ -24,19 +26,11 @@
 		Spanish
 		Swedish
 
-	Look for the sections starting with ### to find the lines to either be replaced with your 
-	script code or that need changing for your script needs
-.PARAMETER CompanyName
-	Company Name to use for the Cover Page.  
-	Default value is contained in HKCU:\Software\Microsoft\Office\Common\UserInfo\CompanyName or
-	HKCU:\Software\Microsoft\Office\Common\UserInfo\Company, whichever is populated on the 
-	computer running the script.
-	This parameter has an alias of CN.
-	If either registry key does not exist and this parameter is not specified, the report will
-	not contain a Company Name on the cover page.
-	This parameter is only valid with the MSWORD and PDF output parameters.
+	Look for the sections starting with ### to find the lines to either be replaced 
+	with your script code or that need changing for your script needs
 .PARAMETER CompanyAddress
-	Company Address to use for the Cover Page, if the Cover Page has the Address field.  
+	Company Address to use for the Cover Page, if the Cover Page has the Address 
+	field.  
 		The following Cover Pages have an Address field:
 			Banded
 			Contrast
@@ -50,7 +44,8 @@
 	This parameter is only valid with the MSWORD and PDF output parameters.
 	This parameter has an alias of CA.
 .PARAMETER CompanyEmail
-	Company Email to use for the Cover Page, if the Cover Page has the Email field.  
+	Company Email to use for the Cover Page, if the Cover Page has the Email 
+	field.  
 		The following Cover Pages have an Email field:
 			Facet
 	This parameter is only valid with the MSWORD and PDF output parameters.
@@ -62,8 +57,19 @@
 			Exposure
 	This parameter is only valid with the MSWORD and PDF output parameters.
 	This parameter has an alias of CF.
+.PARAMETER CompanyName
+	Company Name to use for the Cover Page.  
+	Default value is contained in 
+	HKCU:\Software\Microsoft\Office\Common\UserInfo\CompanyName or
+	HKCU:\Software\Microsoft\Office\Common\UserInfo\Company, whichever is 
+	populated on the computer running the script.
+	This parameter has an alias of CN.
+	If either registry key does not exist and this parameter is not specified, the 
+	report will not contain a Company Name on the cover page.
+	This parameter is only valid with the MSWORD and PDF output parameters.
 .PARAMETER CompanyPhone
-	Company Phone to use for the Cover Page, if the Cover Page has the Phone field.  
+	Company Phone to use for the Cover Page, if the Cover Page has the Phone 
+	field.  
 		The following Cover Pages have a Phone field:
 			Contrast
 			Exposure
@@ -73,14 +79,14 @@
 	What Microsoft Word Cover Page to use.
 	Only Word 2010, 2013 and 2016 are supported.
 	(default cover pages in Word en-US)
-	
+
 	Valid input is:
 		Alphabet (Word 2010. Works)
 		Annual (Word 2010. Doesn't work well for this report)
 		Austere (Word 2010. Works)
-		Austin (Word 2010/2013/2016. Doesn't work in 2013 or 2016, mostly works in 2010 but 
-						Subtitle/Subject & Author fields need to be moved 
-						after title box is moved up)
+		Austin (Word 2010/2013/2016. Doesn't work in 2013 or 2016, mostly 
+		works in 2010 but Subtitle/Subject & Author fields need to be moved 
+		after title box is moved up)
 		Banded (Word 2013/2016. Works)
 		Conservative (Word 2010. Works)
 		Contrast (Word 2010. Works)
@@ -90,20 +96,22 @@
 		Filigree (Word 2013/2016. Works)
 		Grid (Word 2010/2013/2016. Works in 2010)
 		Integral (Word 2013/2016. Works)
-		Ion (Dark) (Word 2013/2016. Top date doesn't fit; box needs to be manually resized or font 
-						changed to 8 point)
-		Ion (Light) (Word 2013/2016. Top date doesn't fit; box needs to be manually resized or font 
-						changed to 8 point)
+		Ion (Dark) (Word 2013/2016. Top date doesn't fit; box needs to be 
+		manually resized or font changed to 8 point)
+		Ion (Light) (Word 2013/2016. Top date doesn't fit; box needs to be 
+		manually resized or font changed to 8 point)
 		Mod (Word 2010. Works)
-		Motion (Word 2010/2013/2016. Works if top date is manually changed to 36 point)
+		Motion (Word 2010/2013/2016. Works if top date is manually changed to 
+		36 point)
 		Newsprint (Word 2010. Works but date is not populated)
 		Perspective (Word 2010. Works)
 		Pinstripes (Word 2010. Works)
-		Puzzle (Word 2010. Top date doesn't fit; box needs to be manually resized or font 
-					changed to 14 point)
+		Puzzle (Word 2010. Top date doesn't fit; box needs to be manually 
+		resized or font changed to 14 point)
 		Retrospect (Word 2013/2016. Works)
 		Semaphore (Word 2013/2016. Works)
-		Sideline (Word 2010/2013/2016. Doesn't work in 2013 or 2016, works in 2010)
+		Sideline (Word 2010/2013/2016. Doesn't work in 2013 or 2016, works in 
+		2010)
 		Slice (Dark) (Word 2013/2016. Doesn't work)
 		Slice (Light) (Word 2013/2016. Doesn't work)
 		Stacks (Word 2010. Works)
@@ -111,8 +119,8 @@
 		Transcend (Word 2010. Works)
 		ViewMaster (Word 2013/2016. Works)
 		Whisp (Word 2013/2016. Works)
-		
-	Default value is Sideline.
+
+	The default value is Sideline.
 	This parameter has an alias of CP.
 	This parameter is only valid with the MSWORD and PDF output parameters.
 .PARAMETER UserName
@@ -135,24 +143,28 @@
 .PARAMETER HTML
 	Creates an HTML file with an .html extension.
 	This parameter is disabled by default.
-	This parameter is reserved for a future update and no output is created at this time.
 .PARAMETER AddDateTime
 	Adds a date time stamp to the end of the file name.
 	Time stamp is in the format of yyyy-MM-dd_HHmm.
-	June 1, 2014 at 6PM is 2014-06-01_1800.
-	Output filename will be ReportName_2014-06-01_1800.docx (or .pdf).
+	June 1, 2018 at 6PM is 2018-06-01_1800.
+	Output filename will be ReportName_2018-06-01_1800.docx (or .pdf).
 	This parameter is disabled by default.
 .PARAMETER Hardware
-	Use WMI to gather hardware information on: Computer System, Disks, Processor and Network Interface Cards
-	This parameter may require the script be run from an elevated PowerShell session 
-	using an account with permission to retrieve hardware information (i.e. Domain Admin or Local Administrator).
-	Selecting this parameter will add to both the time it takes to run the script and size of the report.
+	Use WMI to gather hardware information on: Computer System, Disks, Processor 
+	and Network Interface Cards
+	This parameter may require the script be run from an elevated PowerShell 
+	session using an account with permission to retrieve hardware information 
+	(i.e. Domain Admin or Local Administrator).
+	Selecting this parameter will add to both the time it takes to run the script 
+	and size of the report.
 	This parameter is disabled by default.
 .PARAMETER ComputerName
 	Specifies a computer to use to run the script against.
-	ComputerName can be entered as the NetBIOS name, FQDN, localhost or IP Address.
+	ComputerName can be entered as the NetBIOS name, FQDN, localhost or IP 
+	Address.
 	If entered as localhost, the actual computer name is determined and used.
-	If entered as an IP address, an attempt is made to determine and use the actual computer name.
+	If entered as an IP address, an attempt is made to determine and use the 
+	actual computer name.
 	Default is localhost.
 .PARAMETER Folder
 	Specifies the optional output folder to save the output report. 
@@ -175,12 +187,12 @@
 	Outputs all errors to a text file at the end of the script.
 	
 	This is used when the script developer requests more troubleshooting data.
-	Text file is placed in the same folder from where the script is run.
+	The text file is placed in the same folder from where the script is run.
 	
 	This parameter is disabled by default.
 .PARAMETER ScriptInfo
 	Outputs information about the script to a text file.
-	Text file is placed in the same folder from where the script is run.
+	The text file is placed in the same folder from where the script is run.
 	
 	This parameter is disabled by default.
 	This parameter has an alias of SI.
@@ -188,7 +200,8 @@
 	PS C:\PSScript > .\ScriptTemplate.ps1
 	
 	Will use all default values.
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl Webster" or
+	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl 
+	Webster" or
 	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\Company="Carl Webster"
 	$env:username = Administrator
 
@@ -199,7 +212,8 @@
 	PS C:\PSScript > .\ScriptTemplate.ps1 -PDF
 	
 	Will use all default values and save the document as a PDF file.
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl Webster" or
+	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl 
+	Webster" or
 	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\Company="Carl Webster"
 	$env:username = Administrator
 
@@ -210,35 +224,21 @@
 	PS C:\PSScript > .\ScriptTemplate.ps1 -TEXT
 
 	Will use all default values and save the document as a formatted text file.
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl Webster" or
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\Company="Carl Webster"
-	$env:username = Administrator
-
-	Carl Webster for the Company Name.
-	Sideline for the Cover Page format.
-	Administrator for the User Name.
 .EXAMPLE
 	PS C:\PSScript > .\ScriptTemplate.ps1 -HTML
 
-	This parameter is reserved for a future update and no output is created at this time.
-	
 	Will use all default values and save the document as an HTML file.
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl Webster" or
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\Company="Carl Webster"
-	$env:username = Administrator
-
-	Carl Webster for the Company Name.
-	Sideline for the Cover Page format.
-	Administrator for the User Name.
 .EXAMPLE
-	PS C:\PSScript .\ScriptTemplate.ps1 -CompanyName "Carl Webster Consulting" -CoverPage "Mod" -UserName "Carl Webster"
+	PS C:\PSScript .\ScriptTemplate.ps1 -CompanyName "Carl Webster Consulting" 
+	-CoverPage "Mod" -UserName "Carl Webster"
 
 	Will use:
 		Carl Webster Consulting for the Company Name.
 		Mod for the Cover Page format.
 		Carl Webster for the User Name.
 .EXAMPLE
-	PS C:\PSScript .\ScriptTemplate.ps1 -CompanyName "Sherlock Holmes Consulting" `
+	PS C:\PSScript .\ScriptTemplate.ps1 
+	-CompanyName "Sherlock Holmes Consulting" `
 	-CoverPage Exposure -UserName "Dr. Watson" `
 	-CompanyAddress "221B Baker Street, London, England" `
 	-CompanyFax "+44 1753 276600" `
@@ -252,7 +252,8 @@
 		+44 1753 276600 for the Company Fax.
 		+44 1753 276200 for the Compnay Phone.
 .EXAMPLE
-	PS C:\PSScript .\ScriptTemplate.ps1 -CompanyName "Sherlock Holmes Consulting" `
+	PS C:\PSScript .\ScriptTemplate.ps1 
+	-CompanyName "Sherlock Holmes Consulting" `
 	-CoverPage Facet -UserName "Dr. Watson" `
 	-CompanyEmail SuperSleuth@SherlockHolmes.com
 
@@ -262,7 +263,8 @@
 		Dr. Watson for the User Name.
 		SuperSleuth@SherlockHolmes.com for the Compnay Email.
 .EXAMPLE
-	PS C:\PSScript .\ScriptTemplate.ps1 -CN "Carl Webster Consulting" -CP "Mod" -UN "Carl Webster"
+	PS C:\PSScript .\ScriptTemplate.ps1 -CN "Carl Webster Consulting" -CP "Mod" 
+	-UN "Carl Webster"
 
 	Will use:
 		Carl Webster Consulting for the Company Name (alias CN).
@@ -272,7 +274,8 @@
 	PS C:\PSScript > .\ScriptTemplate.ps1 -AddDateTime
 	
 	Will use all default values.
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl Webster" or
+	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl 
+	Webster" or
 	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\Company="Carl Webster"
 	$env:username = Administrator
 
@@ -282,13 +285,14 @@
 
 	Adds a date time stamp to the end of the file name.
 	Time stamp is in the format of yyyy-MM-dd_HHmm.
-	June 1, 2014 at 6PM is 2014-06-01_1800.
-	Output filename will be Script_Template_2014-06-01_1800.docx
+	June 1, 2018 at 6PM is 2018-06-01_1800.
+	Output filename will be Script_Template_2018-06-01_1800.docx
 .EXAMPLE
 	PS C:\PSScript > .\ScriptTemplate.ps1 -PDF -AddDateTime
 	
 	Will use all default values and save the document as a PDF file.
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl Webster" or
+	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl 
+	Webster" or
 	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\Company="Carl Webster"
 	$env:username = Administrator
 
@@ -298,13 +302,14 @@
 
 	Adds a date time stamp to the end of the file name.
 	Time stamp is in the format of yyyy-MM-dd_HHmm.
-	June 1, 2014 at 6PM is 2014-06-01_1800.
-	Output filename will be Script_Template_2014-06-01_1800.PDF
+	June 1, 2018 at 6PM is 2018-06-01_1800.
+	Output filename will be Script_Template_2018-06-01_1800.PDF
 .EXAMPLE
 	PS C:\PSScript > .\ScriptTemplate.ps1 -Hardware
 	
 	Will use all default values.
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl Webster" or
+	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl 
+	Webster" or
 	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\Company="Carl Webster"
 	$env:username = Administrator
 
@@ -317,7 +322,8 @@
 	PS C:\PSScript > .\ScriptTemplate.ps1 -Hardware -ComputerName 192.168.1.51
 	
 	Will use all default values.
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl Webster" or
+	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl 
+	Webster" or
 	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\Company="Carl Webster"
 	$env:username = Administrator
 
@@ -330,7 +336,8 @@
 	PS C:\PSScript > .\ScriptTemplate.ps1 -Folder \\FileServer\ShareName
 	
 	Will use all default values.
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl Webster" or
+	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl 
+	Webster" or
 	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\Company="Carl Webster"
 	$env:username = Administrator
 
@@ -340,10 +347,12 @@
 	
 	Output file will be saved in the path \\FileServer\ShareName
 .EXAMPLE
-	PS C:\PSScript > .\ScriptTemplate.ps1 -SmtpServer mail.domain.tld -From XDAdmin@domain.tld -To ITGroup@domain.tld
+	PS C:\PSScript > .\ScriptTemplate.ps1 -SmtpServer mail.domain.tld 
+	-From XDAdmin@domain.tld -To ITGroup@domain.tld
 	
 	Will use all Default values.
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl Webster" or
+	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl 
+	Webster" or
 	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\Company="Carl Webster"
 	$env:username = Administrator
 
@@ -351,14 +360,18 @@
 	Sideline for the Cover Page format.
 	Administrator for the User Name.
 	
-	Script will use the email server mail.domain.tld, sending from XDAdmin@domain.tld, sending to ITGroup@domain.tld.
+	Script will use the email server mail.domain.tld, sending from XDAdmin@domain.tld, 
+	sending to ITGroup@domain.tld.
 	Script will use the default SMTP port 25 and will not use SSL.
-	If the current user's credentials are not valid to send email, the user will be prompted to enter valid credentials.
+	If the current user's credentials are not valid to send email, the user will be 
+	prompted to enter valid credentials.
 .EXAMPLE
-	PS C:\PSScript > .\ScriptTemplate.ps1 -SmtpServer smtp.office365.com -SmtpPort 587 -UseSSL -From Webster@CarlWebster.com -To ITGroup@CarlWebster.com
+	PS C:\PSScript > .\ScriptTemplate.ps1 -SmtpServer smtp.office365.com -SmtpPort 587 
+	-UseSSL -From Webster@CarlWebster.com -To ITGroup@CarlWebster.com
 	
 	Will use all Default values.
-	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl Webster" or
+	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\CompanyName="Carl 
+	Webster" or
 	HKEY_CURRENT_USER\Software\Microsoft\Office\Common\UserInfo\Company="Carl Webster"
 	$env:username = Administrator
 
@@ -366,8 +379,10 @@
 	Sideline for the Cover Page format.
 	Administrator for the User Name.
 	
-	Script will use the email server smtp.office365.com on port 587 using SSL, sending from webster@carlwebster.com, sending to ITGroup@carlwebster.com.
-	If the current user's credentials are not valid to send email, the user will be prompted to enter valid credentials.
+	Script will use the email server smtp.office365.com on port 587 using SSL, sending 
+	from webster@carlwebster.com, sending to ITGroup@carlwebster.com.
+	If the current user's credentials are not valid to send email, the user will be 
+	prompted to enter valid credentials.
 .INPUTS
 	None.  You cannot pipe objects to this script.
 .OUTPUTS
@@ -377,7 +392,7 @@
 	NAME: ScriptTemplate.ps1
 	VERSION: 1.00
 	AUTHOR: Carl Webster, Michael B. Smith, Iain Brighton, Jeff Wouters, Barry Schiffer, Jim Moyle
-	LASTEDIT: June 8, 2017
+	LASTEDIT: December 7, 2017
 #>
 
 #endregion
@@ -387,41 +402,6 @@
 [CmdletBinding(SupportsShouldProcess = $False, ConfirmImpact = "None", DefaultParameterSetName = "Word") ]
 
 Param(
-	[parameter(ParameterSetName="Word",Mandatory=$False)] 
-	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
-	[Switch]$MSWord=$False,
-
-	[parameter(ParameterSetName="PDF",Mandatory=$False)] 
-	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
-	[Switch]$PDF=$False,
-
-	[parameter(ParameterSetName="Text",Mandatory=$False)] 
-	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
-	[Switch]$Text=$False,
-
-	[parameter(ParameterSetName="HTML",Mandatory=$False)] 
-	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
-	[Switch]$HTML=$False,
-
-	[parameter(Mandatory=$False)] 
-	[Switch]$AddDateTime=$False,
-	
-	[parameter(Mandatory=$False)] 
-	[Switch]$Hardware=$False,
-
-	[parameter(Mandatory=$False)] 
-	[string]$ComputerName="LocalHost",
-	
-	[parameter(Mandatory=$False)] 
-	[string]$Folder="",
-	
-	[parameter(ParameterSetName="Word",Mandatory=$False)] 
-	[parameter(ParameterSetName="PDF",Mandatory=$False)] 
-	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
-	[Alias("CN")]
-	[ValidateNotNullOrEmpty()]
-	[string]$CompanyName="",
-    
 	[parameter(ParameterSetName="Word",Mandatory=$False)] 
 	[parameter(ParameterSetName="PDF",Mandatory=$False)] 
 	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
@@ -446,6 +426,13 @@ Param(
 	[parameter(ParameterSetName="Word",Mandatory=$False)] 
 	[parameter(ParameterSetName="PDF",Mandatory=$False)] 
 	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
+	[Alias("CN")]
+	[ValidateNotNullOrEmpty()]
+	[string]$CompanyName="",
+    
+	[parameter(ParameterSetName="Word",Mandatory=$False)] 
+	[parameter(ParameterSetName="PDF",Mandatory=$False)] 
+	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
 	[Alias("CPh")]
 	[ValidateNotNullOrEmpty()]
 	[string]$CompanyPhone="",
@@ -464,6 +451,34 @@ Param(
 	[ValidateNotNullOrEmpty()]
 	[string]$UserName=$env:username,
 
+	[parameter(ParameterSetName="HTML",Mandatory=$False)] 
+	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
+	[Switch]$HTML=$False,
+
+	[parameter(ParameterSetName="Word",Mandatory=$False)] 
+	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
+	[Switch]$MSWord=$False,
+
+	[parameter(ParameterSetName="PDF",Mandatory=$False)] 
+	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
+	[Switch]$PDF=$False,
+
+	[parameter(ParameterSetName="Text",Mandatory=$False)] 
+	[parameter(ParameterSetName="SMTP",Mandatory=$False)] 
+	[Switch]$Text=$False,
+
+	[parameter(Mandatory=$False)] 
+	[Switch]$AddDateTime=$False,
+	
+	[parameter(Mandatory=$False)] 
+	[Switch]$Hardware=$False,
+
+	[parameter(Mandatory=$False)] 
+	[string]$ComputerName="LocalHost",
+	
+	[parameter(Mandatory=$False)] 
+	[string]$Folder="",
+	
 	[parameter(ParameterSetName="SMTP",Mandatory=$True)] 
 	[string]$SmtpServer="",
 
@@ -3009,6 +3024,7 @@ Function WriteHTMLLine
 #Function created by Ken Avram
 #Function created to make output to HTML easy in this script
 #headings fixed 12-Oct-2016 by Webster
+#errors with $HTMLStyle fixed 7-Dec-2017 by Webster
 {
 	Param([int]$style=0, 
 	[int]$tabs = 0, 
@@ -3054,17 +3070,6 @@ Function WriteHTMLLine
 		#output the rest of the parameters.
 		$output += $name + $value
 
-		#added by webster 12-oct-2016
-		#if a heading, don't add the <br>
-		If($HTMLStyle -eq "")
-		{
-			$HTMLBody += "<br><font face='" + $HTMLFontName + "' " + "color='" + $color + "' size='"  + $fontsize + "'>"
-		}
-		Else
-		{
-			$HTMLBody += "<font face='" + $HTMLFontName + "' " + "color='" + $color + "' size='"  + $fontsize + "'>"
-		}
-		
 		Switch ($style)
 		{
 			1 {$HTMLStyle = "<h1>"; Break}
@@ -3085,6 +3090,18 @@ Function WriteHTMLLine
 			Default {$HTMLStyle = ""; Break}
 		}
 
+		#added by webster 12-oct-2016
+		#if a heading, don't add the <br>
+		#moved to after the two switch statements on 7-Dec-2017 to fix $HTMLStyle has not been set error
+		If($HTMLStyle -eq "")
+		{
+			$HTMLBody += "<br><font face='" + $HTMLFontName + "' " + "color='" + $color + "' size='"  + $fontsize + "'>"
+		}
+		Else
+		{
+			$HTMLBody += "<font face='" + $HTMLFontName + "' " + "color='" + $color + "' size='"  + $fontsize + "'>"
+		}
+		
 		$HTMLBody += $HTMLStyle +  "</font>"
 
 		If($options -band $htmlitalics) 
@@ -3096,13 +3113,14 @@ Function WriteHTMLLine
 		{
 			$HTMLBody += "</b>"
 		} 
-	}
-	
-	#added by webster 12-oct-2016
-	#if a heading, don't add the <br />
-	If($HTMLStyle -eq "")
-	{
-		$HTMLBody += "<br />"
+
+		#added by webster 12-oct-2016
+		#if a heading, don't add the <br />
+		#moved to inside the Else statement on 7-Dec-2017 to fix $HTMLStyle has not been set error
+		If($HTMLStyle -eq "")
+		{
+			$HTMLBody += "<br />"
+		}
 	}
 
 	out-file -FilePath $Script:FileName1 -Append -InputObject $HTMLBody 4>$Null
@@ -3970,13 +3988,16 @@ Function ShowScriptOptions
 	Write-Verbose "$(Get-Date): "
 	Write-Verbose "$(Get-Date): "
 	Write-Verbose "$(Get-Date): AddDateTime     : $($AddDateTime)"
-	Write-Verbose "$(Get-Date): Company Name    : $($Script:CoName)"
-	Write-Verbose "$(Get-Date): Company Address : $($CompanyAddress)"
-	Write-Verbose "$(Get-Date): Company Email   : $($CompanyEmail)"
-	Write-Verbose "$(Get-Date): Company Fax     : $($CompanyFax)"
-	Write-Verbose "$(Get-Date): Company Phone   : $($CompanyPhone)"
+	If($MSWORD -or $PDF)
+	{
+		Write-Verbose "$(Get-Date): Company Name    : $($Script:CoName)"
+		Write-Verbose "$(Get-Date): Company Address : $($CompanyAddress)"
+		Write-Verbose "$(Get-Date): Company Email   : $($CompanyEmail)"
+		Write-Verbose "$(Get-Date): Company Fax     : $($CompanyFax)"
+		Write-Verbose "$(Get-Date): Company Phone   : $($CompanyPhone)"
+		Write-Verbose "$(Get-Date): Cover Page      : $($CoverPage)"
+	}
 	Write-Verbose "$(Get-Date): Computer Name   : $($ComputerName)"
-	Write-Verbose "$(Get-Date): Cover Page      : $($CoverPage)"
 	Write-Verbose "$(Get-Date): Dev             : $($Dev)"
 	If($Dev)
 	{
@@ -4006,8 +4027,11 @@ Function ShowScriptOptions
 	Write-Verbose "$(Get-Date): PoSH version    : $($Host.Version)"
 	Write-Verbose "$(Get-Date): PSCulture       : $($PSCulture)"
 	Write-Verbose "$(Get-Date): PSUICulture     : $($PSUICulture)"
-	Write-Verbose "$(Get-Date): Word language   : $($Script:WordLanguageValue)"
-	Write-Verbose "$(Get-Date): Word version    : $($Script:WordProduct)"
+	If($MSWORD -or $PDF)
+	{
+		Write-Verbose "$(Get-Date): Word language   : $($Script:WordLanguageValue)"
+		Write-Verbose "$(Get-Date): Word version    : $($Script:WordProduct)"
+	}
 	Write-Verbose "$(Get-Date): "
 	Write-Verbose "$(Get-Date): Script start    : $($Script:StartTime)"
 	Write-Verbose "$(Get-Date): "
@@ -4464,6 +4488,7 @@ Function OutputSampleText
 	}
 	ElseIf($HTML)
 	{
+		#7-Dec-2017, fix the WriteHTMLLine function so all the WriteHTMLLine 0 0 lines have been removed
 		WriteHTMLLine 1 0 "This is Heading 1"
 
 		WriteHTMLLine 2 0 "This is Heading 2"
@@ -4473,62 +4498,42 @@ Function OutputSampleText
 		WriteHTMLLine 4 0 "This is Heading 4"
 
 		WriteHTMLLine 0 0 "This is a regular line of text indented 0 tab stops"
-		#the next line is a blank line used for spacing
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 1 "This is a regular line of text indented 1 tab stops"
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 2 "This is a regular line of text indented 2 tab stops"
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 3 "This is a regular line of text indented 3 tab stops"
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text in the default font in italics" "" $null 0 $htmlitalics
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text in the default font in bold" "" $null 0 $htmlbold
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text in the default font in bold italics" "" $null 0 ($htmlbold -bor $htmlitalics)
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text in the default font in 7.5 point" "" $null 1   # 7.5 point font
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text in the default font in 10 point" "" $null 2   # 10 point font
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text in the default font in 13.5 point" "" $null 3   # 13.5 point font
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text in the default font in 15 point" "" $null 4   # 15 point font
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text in the default font in 18 point" "" $null 5   # 18 point font
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text in the default font in 24 point" "" $null 6   # 24 point font
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text in the default font in 36 point" "" $null 7   # 36 point font
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text in Courier New font" "" "Courier New" 0 
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text indented 0 tab stops with the computer name as data: " $env:computername 
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text indented 0 tab stops with the computer name as data in bold: " $env:computername $null 0 $htmlitalics
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text indented 0 tab stops with the computer name as data in bold italics: " $env:computername $null 0 ($htmlbold -bor $htmlitalics)
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of RED text indented 0 tab stops with the computer name as data in 13.5 point bold italics: " $env:computername $null 4 ($htmlred -bor $htmlbold -bor $htmlitalics)
-		WriteHTMLLine 0 0 ""
 
 		WriteHTMLLine 0 0 "This is a regular line of text indented 0 tab stops with the computer name as data in 10 point Courier New bold italics: " $env:computername "Courier New" 2 ($htmlbold -bor $htmlitalics)
 	}
@@ -5006,33 +5011,40 @@ Function ProcessScriptInformation
 {
 	## IB - Build Script information
 	Write-Verbose "$(Get-Date): `tBuilding script information"
+	
 	[System.Collections.Hashtable[]] $Script:ScriptInformation = @()
-	$Script:ScriptInformation += @{ Data = "Company Name"; Value = $Script:CoName; }
-	$Script:ScriptInformation += @{ Data = "Cover Page"; Value = $CoverPage; }
-	$Script:ScriptInformation += @{ Data = "User Name"; Value = $UserName; }
-	$Script:ScriptInformation += @{ Data = "Save as PDF"; Value = $PDF; }
-	$Script:ScriptInformation += @{ Data = "Save as TEXT"; Value = $TEXT; }
-	$Script:ScriptInformation += @{ Data = "Save as WORD"; Value = $MSWORD; }
-	$Script:ScriptInformation += @{ Data = "Save as HTML"; Value = $HTML; }
-	$Script:ScriptInformation += @{ Data = "Add DateTime"; Value = $AddDateTime; }
-	$Script:ScriptInformation += @{ Data = "Hardware Inventory"; Value = $Hardware; }
-	$Script:ScriptInformation += @{ Data = "Computer Name"; Value = $ComputerName; }
+
+	#if stmt added 7-Dec-2017
 	If($MSWORD -or $PDF)
 	{
+		$Script:ScriptInformation += @{ Data = "Company Name"; Value = $Script:CoName; }
+		$Script:ScriptInformation += @{ Data = "Company Address"; Value = $CompanyAddress; } #added 7-Dec-2017
+		$Script:ScriptInformation += @{ Data = "Company Email"; Value = $CompanyEmail; } #added 7-Dec-2017
+		$Script:ScriptInformation += @{ Data = "Company Fax"; Value = $CompanyFax; } #added 7-Dec-2017
+		$Script:ScriptInformation += @{ Data = "Company Phone"; Value = $CompanyPhone; } #added 7-Dec-2017
+		$Script:ScriptInformation += @{ Data = "Cover Page"; Value = $CoverPage; }
+		$Script:ScriptInformation += @{ Data = "User Name"; Value = $UserName; }
+		$Script:ScriptInformation += @{ Data = "Save as PDF"; Value = $PDF; }
+		$Script:ScriptInformation += @{ Data = "Save as TEXT"; Value = $TEXT; }
+		$Script:ScriptInformation += @{ Data = "Save as WORD"; Value = $MSWORD; }
+		$Script:ScriptInformation += @{ Data = "Save as HTML"; Value = $HTML; }
+		$Script:ScriptInformation += @{ Data = "Add DateTime"; Value = $AddDateTime; }
+		$Script:ScriptInformation += @{ Data = "Hardware Inventory"; Value = $Hardware; }
+		$Script:ScriptInformation += @{ Data = "Computer Name"; Value = $ComputerName; }
 		$Script:ScriptInformation += @{ Data = "Title"; Value = $Script:Title; }
+		$Script:ScriptInformation += @{ Data = "Filename1"; Value = $Script:FileName1; }
+		## IB - We only need Filename2 if it's a PDF (and we're no longer worried about the number of rows!)
+		If($PDF) 
+		{ 
+			$Script:ScriptInformation += @{ Data = "Filename2"; Value = $Script:Filename2; } 
+		}
+		$Script:ScriptInformation += @{ Data = "OS Detected"; Value = $Script:RunningOS; }
+		$Script:ScriptInformation += @{ Data = "PSUICulture"; Value = $PSUICulture; }
+		$Script:ScriptInformation += @{ Data = "PSCulture"; Value = $PSCulture; }
+		$Script:ScriptInformation += @{ Data = "Word version"; Value = $WordProduct; }
+		$Script:ScriptInformation += @{ Data = "Word language"; Value = $WordLanguageValue; }
+		$Script:ScriptInformation += @{ Data = "PoSH version"; Value = $Host.Version; }
 	}
-	$Script:ScriptInformation += @{ Data = "Filename1"; Value = $Script:FileName1; }
-	## IB - We only need Filename2 if it's a PDF (and we're no longer worried about the number of rows!)
-	If($PDF) 
-	{ 
-		$Script:ScriptInformation += @{ Data = "Filename2"; Value = $Script:Filename2; } 
-	}
-	$Script:ScriptInformation += @{ Data = "OS Detected"; Value = $Script:RunningOS; }
-	$Script:ScriptInformation += @{ Data = "PSUICulture"; Value = $PSUICulture; }
-	$Script:ScriptInformation += @{ Data = "PSCulture"; Value = $PSCulture; }
-	$Script:ScriptInformation += @{ Data = "Word version"; Value = $WordProduct; }
-	$Script:ScriptInformation += @{ Data = "Word language"; Value = $WordLanguageValue; }
-	$Script:ScriptInformation += @{ Data = "PoSH version"; Value = $Host.Version; }
 }
 
 Function ProcessAutoFitVerticalTable
