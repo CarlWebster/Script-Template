@@ -768,6 +768,7 @@ Function GetComputerWMIInfo
 	# http://blog.myvirtualvision.com
 	# modified 1-May-2014 to work in trusted AD Forests and using different domain admin credentials	
 	# modified 17-Aug-2016 to fix a few issues with Text and HTML output
+	# modified 29-Apr-2018 to change from Arrays to New-Object System.Collections.ArrayList
 
 	#Get Computer info
 	Write-Verbose "$(Get-Date): `t`tProcessing WMI Computer information"
@@ -1200,14 +1201,14 @@ Function OutputComputerItem
 	
 	If($MSWord -or $PDF)
 	{
-		[System.Collections.Hashtable[]] $ItemInformation = @()
-		$ItemInformation += @{ Data = "Manufacturer"; Value = $Item.manufacturer; }
-		$ItemInformation += @{ Data = "Model"; Value = $Item.model; }
-		$ItemInformation += @{ Data = "Domain"; Value = $Item.domain; }
-		$ItemInformation += @{ Data = "Operating System"; Value = $OS; }
-		$ItemInformation += @{ Data = "Total Ram"; Value = "$($Item.totalphysicalram) GB"; }
-		$ItemInformation += @{ Data = "Physical Processors (sockets)"; Value = $Item.NumberOfProcessors; }
-		$ItemInformation += @{ Data = "Logical Processors (cores w/HT)"; Value = $Item.NumberOfLogicalProcessors; }
+		$ItemInformation = New-Object System.Collections.ArrayList
+		$ItemInformation.Add(@{ Data = "Manufacturer"; Value = $Item.manufacturer; }) > $Null
+		$ItemInformation.Add(@{ Data = "Model"; Value = $Item.model; }) > $Null
+		$ItemInformation.Add(@{ Data = "Domain"; Value = $Item.domain; }) > $Null
+		$ItemInformation.Add(@{ Data = "Operating System"; Value = $OS; }) > $Null
+		$ItemInformation.Add(@{ Data = "Total Ram"; Value = "$($Item.totalphysicalram) GB"; }) > $Null
+		$ItemInformation.Add(@{ Data = "Physical Processors (sockets)"; Value = $Item.NumberOfProcessors; }) > $Null
+		$ItemInformation.Add(@{ Data = "Logical Processors (cores w/HT)"; Value = $Item.NumberOfLogicalProcessors; }) > $Null
 		$Table = AddWordTable -Hashtable $ItemInformation `
 		-Columns Data,Value `
 		-List `
@@ -1239,14 +1240,14 @@ Function OutputComputerItem
 	}
 	ElseIf($HTML)
 	{
-		$rowdata = @()
+		$rowdata = New-Object System.Collections.ArrayList
 		$columnHeaders = @("Manufacturer",($htmlsilver -bor $htmlbold),$Item.manufacturer,$htmlwhite)
-		$rowdata += @(,('Model',($htmlsilver -bor $htmlbold),$Item.model,$htmlwhite))
-		$rowdata += @(,('Domain',($htmlsilver -bor $htmlbold),$Item.domain,$htmlwhite))
-		$rowdata += @(,('Operating System',($htmlsilver -bor $htmlbold),$OS,$htmlwhite))
-		$rowdata += @(,('Total Ram',($htmlsilver -bor $htmlbold),"$($Item.totalphysicalram) GB",$htmlwhite))
-		$rowdata += @(,('Physical Processors (sockets)',($htmlsilver -bor $htmlbold),$Item.NumberOfProcessors,$htmlwhite))
-		$rowdata += @(,('Logical Processors (cores w/HT)',($htmlsilver -bor $htmlbold),$Item.NumberOfLogicalProcessors,$htmlwhite))
+		$rowdata.Add(@(,('Model',($htmlsilver -bor $htmlbold),$Item.model,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Domain',($htmlsilver -bor $htmlbold),$Item.domain,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Operating System',($htmlsilver -bor $htmlbold),$OS,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Total Ram',($htmlsilver -bor $htmlbold),"$($Item.totalphysicalram) GB",$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Physical Processors (sockets)',($htmlsilver -bor $htmlbold),$Item.NumberOfProcessors,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Logical Processors (cores w/HT)',($htmlsilver -bor $htmlbold),$Item.NumberOfLogicalProcessors,$htmlwhite))) > $Null
 
 		$msg = ""
 		$columnWidths = @("150px","200px")
@@ -1287,27 +1288,27 @@ Function OutputDriveItem
 
 	If($MSWORD -or $PDF)
 	{
-		[System.Collections.Hashtable[]] $DriveInformation = @()
-		$DriveInformation += @{ Data = "Caption"; Value = $Drive.caption; }
-		$DriveInformation += @{ Data = "Size"; Value = "$($drive.drivesize) GB"; }
+		$DriveInformation = New-Object System.Collections.ArrayList
+		$DriveInformation.Add(@{ Data = "Caption"; Value = $Drive.caption; }) > $Null
+		$DriveInformation.Add(@{ Data = "Size"; Value = "$($drive.drivesize) GB"; }) > $Null
 		If(![String]::IsNullOrEmpty($drive.filesystem))
 		{
-			$DriveInformation += @{ Data = "File System"; Value = $Drive.filesystem; }
+			$DriveInformation.Add(@{ Data = "File System"; Value = $Drive.filesystem; }) > $Null
 		}
-		$DriveInformation += @{ Data = "Free Space"; Value = "$($drive.drivefreespace) GB"; }
+		$DriveInformation.Add(@{ Data = "Free Space"; Value = "$($drive.drivefreespace) GB"; }) > $Null
 		If(![String]::IsNullOrEmpty($drive.volumename))
 		{
-			$DriveInformation += @{ Data = "Volume Name"; Value = $Drive.volumename; }
+			$DriveInformation.Add(@{ Data = "Volume Name"; Value = $Drive.volumename; }) > $Null
 		}
 		If(![String]::IsNullOrEmpty($drive.volumedirty))
 		{
-			$DriveInformation += @{ Data = "Volume is Dirty"; Value = $xVolumeDirty; }
+			$DriveInformation.Add(@{ Data = "Volume is Dirty"; Value = $xVolumeDirty; }) > $Null
 		}
 		If(![String]::IsNullOrEmpty($drive.volumeserialnumber))
 		{
-			$DriveInformation += @{ Data = "Volume Serial Number"; Value = $Drive.volumeserialnumber; }
+			$DriveInformation.Add(@{ Data = "Volume Serial Number"; Value = $Drive.volumeserialnumber; }) > $Null
 		}
-		$DriveInformation += @{ Data = "Drive Type"; Value = $xDriveType; }
+		$DriveInformation.Add(@{ Data = "Drive Type"; Value = $xDriveType; }) > $Null
 		$Table = AddWordTable -Hashtable $DriveInformation `
 		-Columns Data,Value `
 		-List `
@@ -1354,28 +1355,28 @@ Function OutputDriveItem
 	}
 	ElseIf($HTML)
 	{
-		$rowdata = @()
+		$rowdata = New-Object System.Collections.ArrayList
 		$columnHeaders = @("Caption",($htmlsilver -bor $htmlbold),$Drive.caption,$htmlwhite)
-		$rowdata += @(,('Size',($htmlsilver -bor $htmlbold),"$($drive.drivesize) GB",$htmlwhite))
+		$rowdata.Add(@(,('Size',($htmlsilver -bor $htmlbold),"$($drive.drivesize) GB",$htmlwhite))) > $Null
 
 		If(![String]::IsNullOrEmpty($drive.filesystem))
 		{
-			$rowdata += @(,('File System',($htmlsilver -bor $htmlbold),$Drive.filesystem,$htmlwhite))
+			$rowdata.Add(@(,('File System',($htmlsilver -bor $htmlbold),$Drive.filesystem,$htmlwhite))) > $Null
 		}
-		$rowdata += @(,('Free Space',($htmlsilver -bor $htmlbold),"$($drive.drivefreespace) GB",$htmlwhite))
+		$rowdata.Add(@(,('Free Space',($htmlsilver -bor $htmlbold),"$($drive.drivefreespace) GB",$htmlwhite))) > $Null
 		If(![String]::IsNullOrEmpty($drive.volumename))
 		{
-			$rowdata += @(,('Volume Name',($htmlsilver -bor $htmlbold),$Drive.volumename,$htmlwhite))
+			$rowdata.Add(@(,('Volume Name',($htmlsilver -bor $htmlbold),$Drive.volumename,$htmlwhite))) > $Null
 		}
 		If(![String]::IsNullOrEmpty($drive.volumedirty))
 		{
-			$rowdata += @(,('Volume is Dirty',($htmlsilver -bor $htmlbold),$xVolumeDirty,$htmlwhite))
+			$rowdata.Add(@(,('Volume is Dirty',($htmlsilver -bor $htmlbold),$xVolumeDirty,$htmlwhite))) > $Null
 		}
 		If(![String]::IsNullOrEmpty($drive.volumeserialnumber))
 		{
-			$rowdata += @(,('Volume Serial Number',($htmlsilver -bor $htmlbold),$Drive.volumeserialnumber,$htmlwhite))
+			$rowdata.Add(@(,('Volume Serial Number',($htmlsilver -bor $htmlbold),$Drive.volumeserialnumber,$htmlwhite))) > $Null
 		}
-		$rowdata += @(,('Drive Type',($htmlsilver -bor $htmlbold),$xDriveType,$htmlwhite))
+		$rowdata.Add(@(,('Drive Type',($htmlsilver -bor $htmlbold),$xDriveType,$htmlwhite))) > $Null
 
 		$msg = ""
 		$columnWidths = @("150px","200px")
@@ -1413,27 +1414,27 @@ Function OutputProcessorItem
 
 	If($MSWORD -or $PDF)
 	{
-		[System.Collections.Hashtable[]] $ProcessorInformation = @()
-		$ProcessorInformation += @{ Data = "Name"; Value = $Processor.name; }
-		$ProcessorInformation += @{ Data = "Description"; Value = $Processor.description; }
-		$ProcessorInformation += @{ Data = "Max Clock Speed"; Value = "$($processor.maxclockspeed) MHz"; }
+		$ProcessorInformation = New-Object System.Collections.ArrayList
+		$ProcessorInformation.Add(@{ Data = "Name"; Value = $Processor.name; }) > $Null
+		$ProcessorInformation.Add(@{ Data = "Description"; Value = $Processor.description; }) > $Null
+		$ProcessorInformation.Add(@{ Data = "Max Clock Speed"; Value = "$($processor.maxclockspeed) MHz"; }) > $Null
 		If($processor.l2cachesize -gt 0)
 		{
-			$ProcessorInformation += @{ Data = "L2 Cache Size"; Value = "$($processor.l2cachesize) KB"; }
+			$ProcessorInformation.Add(@{ Data = "L2 Cache Size"; Value = "$($processor.l2cachesize) KB"; }) > $Null
 		}
 		If($processor.l3cachesize -gt 0)
 		{
-			$ProcessorInformation += @{ Data = "L3 Cache Size"; Value = "$($processor.l3cachesize) KB"; }
+			$ProcessorInformation.Add(@{ Data = "L3 Cache Size"; Value = "$($processor.l3cachesize) KB"; }) > $Null
 		}
 		If($processor.numberofcores -gt 0)
 		{
-			$ProcessorInformation += @{ Data = "Number of Cores"; Value = $Processor.numberofcores; }
+			$ProcessorInformation.Add(@{ Data = "Number of Cores"; Value = $Processor.numberofcores; }) > $Null
 		}
 		If($processor.numberoflogicalprocessors -gt 0)
 		{
-			$ProcessorInformation += @{ Data = "Number of Logical Processors (cores w/HT)"; Value = $Processor.numberoflogicalprocessors; }
+			$ProcessorInformation.Add(@{ Data = "Number of Logical Processors (cores w/HT)"; Value = $Processor.numberoflogicalprocessors; }) > $Null
 		}
-		$ProcessorInformation += @{ Data = "Availability"; Value = $xAvailability; }
+		$ProcessorInformation.Add(@{ Data = "Availability"; Value = $xAvailability; }) > $Null
 		$Table = AddWordTable -Hashtable $ProcessorInformation `
 		-Columns Data,Value `
 		-List `
@@ -1478,28 +1479,28 @@ Function OutputProcessorItem
 	}
 	ElseIf($HTML)
 	{
-		$rowdata = @()
+		$rowdata = New-Object System.Collections.ArrayList
 		$columnHeaders = @("Name",($htmlsilver -bor $htmlbold),$Processor.name,$htmlwhite)
-		$rowdata += @(,('Description',($htmlsilver -bor $htmlbold),$Processor.description,$htmlwhite))
+		$rowdata.Add(@(,('Description',($htmlsilver -bor $htmlbold),$Processor.description,$htmlwhite))) > $Null
 
-		$rowdata += @(,('Max Clock Speed',($htmlsilver -bor $htmlbold),"$($processor.maxclockspeed) MHz",$htmlwhite))
+		$rowdata.Add(@(,('Max Clock Speed',($htmlsilver -bor $htmlbold),"$($processor.maxclockspeed) MHz",$htmlwhite))) > $Null
 		If($processor.l2cachesize -gt 0)
 		{
-			$rowdata += @(,('L2 Cache Size',($htmlsilver -bor $htmlbold),"$($processor.l2cachesize) KB",$htmlwhite))
+			$rowdata.Add(@(,('L2 Cache Size',($htmlsilver -bor $htmlbold),"$($processor.l2cachesize) KB",$htmlwhite))) > $Null
 		}
 		If($processor.l3cachesize -gt 0)
 		{
-			$rowdata += @(,('L3 Cache Size',($htmlsilver -bor $htmlbold),"$($processor.l3cachesize) KB",$htmlwhite))
+			$rowdata.Add(@(,('L3 Cache Size',($htmlsilver -bor $htmlbold),"$($processor.l3cachesize) KB",$htmlwhite))) > $Null
 		}
 		If($processor.numberofcores -gt 0)
 		{
-			$rowdata += @(,('Number of Cores',($htmlsilver -bor $htmlbold),$Processor.numberofcores,$htmlwhite))
+			$rowdata.Add(@(,('Number of Cores',($htmlsilver -bor $htmlbold),$Processor.numberofcores,$htmlwhite))) > $Null
 		}
 		If($processor.numberoflogicalprocessors -gt 0)
 		{
-			$rowdata += @(,('Number of Logical Processors (cores w/HT)',($htmlsilver -bor $htmlbold),$Processor.numberoflogicalprocessors,$htmlwhite))
+			$rowdata.Add(@(,('Number of Logical Processors (cores w/HT)',($htmlsilver -bor $htmlbold),$Processor.numberoflogicalprocessors,$htmlwhite))) > $Null
 		}
-		$rowdata += @(,('Availability',($htmlsilver -bor $htmlbold),$xAvailability,$htmlwhite))
+		$rowdata.Add(@(,('Availability',($htmlsilver -bor $htmlbold),$xAvailability,$htmlwhite))) > $Null
 
 		$msg = ""
 		$columnWidths = @("150px","200px")
@@ -1553,35 +1554,35 @@ Function OutputNicItem
 		Default	{$xAvailability = "Unknown"; Break}
 	}
 
-	$xIPAddress = @()
+	$xIPAddress = New-Object System.Collections.ArrayList
 	ForEach($IPAddress in $Nic.ipaddress)
 	{
-		$xIPAddress += "$($IPAddress)"
+		$xIPAddress.Add("$($IPAddress)") > $Null
 	}
 
-	$xIPSubnet = @()
+	$xIPSubnet = New-Object System.Collections.ArrayList
 	ForEach($IPSubnet in $Nic.ipsubnet)
 	{
-		$xIPSubnet += "$($IPSubnet)"
+		$xIPSubnet.Add("$($IPSubnet)") > $Null
 	}
 
 	If($Null -ne $nic.dnsdomainsuffixsearchorder -and $nic.dnsdomainsuffixsearchorder.length -gt 0)
 	{
 		$nicdnsdomainsuffixsearchorder = $nic.dnsdomainsuffixsearchorder
-		$xnicdnsdomainsuffixsearchorder = @()
+		$xnicdnsdomainsuffixsearchorder = New-Object System.Collections.ArrayList
 		ForEach($DNSDomain in $nicdnsdomainsuffixsearchorder)
 		{
-			$xnicdnsdomainsuffixsearchorder += "$($DNSDomain)"
+			$xnicdnsdomainsuffixsearchorder.Add("$($DNSDomain)") > $Null
 		}
 	}
 	
 	If($Null -ne $nic.dnsserversearchorder -and $nic.dnsserversearchorder.length -gt 0)
 	{
 		$nicdnsserversearchorder = $nic.dnsserversearchorder
-		$xnicdnsserversearchorder = @()
+		$xnicdnsserversearchorder = New-Object System.Collections.ArrayList
 		ForEach($DNSServer in $nicdnsserversearchorder)
 		{
-			$xnicdnsserversearchorder += "$($DNSServer)"
+			$xnicdnsserversearchorder.Add("$($DNSServer)") > $Null
 		}
 	}
 
@@ -1616,99 +1617,99 @@ Function OutputNicItem
 
 	If($MSWORD -or $PDF)
 	{
-		[System.Collections.Hashtable[]] $NicInformation = @()
-		$NicInformation += @{ Data = "Name"; Value = $ThisNic.Name; }
+		$NicInformation = New-Object System.Collections.ArrayList
+		$NicInformation.Add(@{ Data = "Name"; Value = $ThisNic.Name; }) > $Null
 		If($ThisNic.Name -ne $nic.description)
 		{
-			$NicInformation += @{ Data = "Description"; Value = $Nic.description; }
+			$NicInformation.Add(@{ Data = "Description"; Value = $Nic.description; }) > $Null
 		}
-		$NicInformation += @{ Data = "Connection ID"; Value = $ThisNic.NetConnectionID; }
+		$NicInformation.Add(@{ Data = "Connection ID"; Value = $ThisNic.NetConnectionID; }) > $Null
 		If(validObject $Nic Manufacturer)
 		{
-			$NicInformation += @{ Data = "Manufacturer"; Value = $Nic.manufacturer; }
+			$NicInformation.Add(@{ Data = "Manufacturer"; Value = $Nic.manufacturer; }) > $Null
 		}
-		$NicInformation += @{ Data = "Availability"; Value = $xAvailability; }
-		$NicInformation += @{ Data = "Allow the computer to turn off this device to save power"; Value = $PowerSaving; }
-		$NicInformation += @{ Data = "Physical Address"; Value = $Nic.macaddress; }
+		$NicInformation.Add(@{ Data = "Availability"; Value = $xAvailability; }) > $Null
+		$NicInformation.Add(@{ Data = "Allow the computer to turn off this device to save power"; Value = $PowerSaving; }) > $Null
+		$NicInformation.Add(@{ Data = "Physical Address"; Value = $Nic.macaddress; }) > $Null
 		If($xIPAddress.Count -gt 1)
 		{
-			$NicInformation += @{ Data = "IP Address"; Value = $xIPAddress[0]; }
-			$NicInformation += @{ Data = "Default Gateway"; Value = $Nic.Defaultipgateway; }
-			$NicInformation += @{ Data = "Subnet Mask"; Value = $xIPSubnet[0]; }
+			$NicInformation.Add(@{ Data = "IP Address"; Value = $xIPAddress[0]; }) > $Null
+			$NicInformation.Add(@{ Data = "Default Gateway"; Value = $Nic.Defaultipgateway; }) > $Null
+			$NicInformation.Add(@{ Data = "Subnet Mask"; Value = $xIPSubnet[0]; }) > $Null
 			$cnt = -1
 			ForEach($tmp in $xIPAddress)
 			{
 				$cnt++
 				If($cnt -gt 0)
 				{
-					$NicInformation += @{ Data = "IP Address"; Value = $tmp; }
-					$NicInformation += @{ Data = "Subnet Mask"; Value = $xIPSubnet[$cnt]; }
+					$NicInformation.Add(@{ Data = "IP Address"; Value = $tmp; }) > $Null
+					$NicInformation.Add(@{ Data = "Subnet Mask"; Value = $xIPSubnet[$cnt]; }) > $Null
 				}
 			}
 		}
 		Else
 		{
-			$NicInformation += @{ Data = "IP Address"; Value = $xIPAddress; }
-			$NicInformation += @{ Data = "Default Gateway"; Value = $Nic.Defaultipgateway; }
-			$NicInformation += @{ Data = "Subnet Mask"; Value = $xIPSubnet; }
+			$NicInformation.Add(@{ Data = "IP Address"; Value = $xIPAddress; }) > $Null
+			$NicInformation.Add(@{ Data = "Default Gateway"; Value = $Nic.Defaultipgateway; }) > $Null
+			$NicInformation.Add(@{ Data = "Subnet Mask"; Value = $xIPSubnet; }) > $Null
 		}
 		If($nic.dhcpenabled)
 		{
 			$DHCPLeaseObtainedDate = $nic.ConvertToDateTime($nic.dhcpleaseobtained)
 			$DHCPLeaseExpiresDate = $nic.ConvertToDateTime($nic.dhcpleaseexpires)
-			$NicInformation += @{ Data = "DHCP Enabled"; Value = $Nic.dhcpenabled; }
-			$NicInformation += @{ Data = "DHCP Lease Obtained"; Value = $dhcpleaseobtaineddate; }
-			$NicInformation += @{ Data = "DHCP Lease Expires"; Value = $dhcpleaseexpiresdate; }
-			$NicInformation += @{ Data = "DHCP Server"; Value = $Nic.dhcpserver; }
+			$NicInformation.Add(@{ Data = "DHCP Enabled"; Value = $Nic.dhcpenabled; }) > $Null
+			$NicInformation.Add(@{ Data = "DHCP Lease Obtained"; Value = $dhcpleaseobtaineddate; }) > $Null
+			$NicInformation.Add(@{ Data = "DHCP Lease Expires"; Value = $dhcpleaseexpiresdate; }) > $Null
+			$NicInformation.Add(@{ Data = "DHCP Server"; Value = $Nic.dhcpserver; }) > $Null
 		}
 		If(![String]::IsNullOrEmpty($nic.dnsdomain))
 		{
-			$NicInformation += @{ Data = "DNS Domain"; Value = $Nic.dnsdomain; }
+			$NicInformation.Add(@{ Data = "DNS Domain"; Value = $Nic.dnsdomain; }) > $Null
 		}
 		If($Null -ne $nic.dnsdomainsuffixsearchorder -and $nic.dnsdomainsuffixsearchorder.length -gt 0)
 		{
-			$NicInformation += @{ Data = "DNS Search Suffixes"; Value = $xnicdnsdomainsuffixsearchorder[0]; }
+			$NicInformation.Add(@{ Data = "DNS Search Suffixes"; Value = $xnicdnsdomainsuffixsearchorder[0]; }) > $Null
 			$cnt = -1
 			ForEach($tmp in $xnicdnsdomainsuffixsearchorder)
 			{
 				$cnt++
 				If($cnt -gt 0)
 				{
-					$NicInformation += @{ Data = ""; Value = $tmp; }
+					$NicInformation.Add(@{ Data = ""; Value = $tmp; }) > $Null
 				}
 			}
 		}
-		$NicInformation += @{ Data = "DNS WINS Enabled"; Value = $xdnsenabledforwinsresolution; }
+		$NicInformation.Add(@{ Data = "DNS WINS Enabled"; Value = $xdnsenabledforwinsresolution; }) > $Null
 		If($Null -ne $nic.dnsserversearchorder -and $nic.dnsserversearchorder.length -gt 0)
 		{
-			$NicInformation += @{ Data = "DNS Servers"; Value = $xnicdnsserversearchorder[0]; }
+			$NicInformation.Add(@{ Data = "DNS Servers"; Value = $xnicdnsserversearchorder[0]; }) > $Null
 			$cnt = -1
 			ForEach($tmp in $xnicdnsserversearchorder)
 			{
 				$cnt++
 				If($cnt -gt 0)
 				{
-					$NicInformation += @{ Data = ""; Value = $tmp; }
+					$NicInformation.Add(@{ Data = ""; Value = $tmp; }) > $Null
 				}
 			}
 		}
-		$NicInformation += @{ Data = "NetBIOS Setting"; Value = $xTcpipNetbiosOptions; }
-		$NicInformation += @{ Data = "WINS: Enabled LMHosts"; Value = $xwinsenablelmhostslookup; }
+		$NicInformation.Add(@{ Data = "NetBIOS Setting"; Value = $xTcpipNetbiosOptions; }) > $Null
+		$NicInformation.Add(@{ Data = "WINS: Enabled LMHosts"; Value = $xwinsenablelmhostslookup; }) > $Null
 		If(![String]::IsNullOrEmpty($nic.winshostlookupfile))
 		{
-			$NicInformation += @{ Data = "Host Lookup File"; Value = $Nic.winshostlookupfile; }
+			$NicInformation.Add(@{ Data = "Host Lookup File"; Value = $Nic.winshostlookupfile; }) > $Null
 		}
 		If(![String]::IsNullOrEmpty($nic.winsprimaryserver))
 		{
-			$NicInformation += @{ Data = "Primary Server"; Value = $Nic.winsprimaryserver; }
+			$NicInformation.Add(@{ Data = "Primary Server"; Value = $Nic.winsprimaryserver; }) > $Null
 		}
 		If(![String]::IsNullOrEmpty($nic.winssecondaryserver))
 		{
-			$NicInformation += @{ Data = "Secondary Server"; Value = $Nic.winssecondaryserver; }
+			$NicInformation.Add(@{ Data = "Secondary Server"; Value = $Nic.winssecondaryserver; }) > $Null
 		}
 		If(![String]::IsNullOrEmpty($nic.winsscopeid))
 		{
-			$NicInformation += @{ Data = "Scope ID"; Value = $Nic.winsscopeid; }
+			$NicInformation.Add(@{ Data = "Scope ID"; Value = $Nic.winsscopeid; }) > $Null
 		}
 		$Table = AddWordTable -Hashtable $NicInformation -Columns Data,Value -List -AutoFit $wdAutoFitFixed;
 
@@ -1723,6 +1724,7 @@ Function OutputNicItem
 
 		FindWordDocumentEnd
 		$Table = $Null
+		WriteWordLine 0 0 ""
 	}
 	ElseIf($Text)
 	{
@@ -1822,101 +1824,102 @@ Function OutputNicItem
 		{
 			Line 3 "Scope ID`t`t: " $nic.winsscopeid
 		}
+		Line 0 ""
 	}
 	ElseIf($HTML)
 	{
-		$rowdata = @()
+		$rowdata = New-Object System.Collections.ArrayList
 		$columnHeaders = @("Name",($htmlsilver -bor $htmlbold),$ThisNic.Name,$htmlwhite)
 		If($ThisNic.Name -ne $nic.description)
 		{
-			$rowdata += @(,('Description',($htmlsilver -bor $htmlbold),$Nic.description,$htmlwhite))
+			$rowdata.Add(@(,('Description',($htmlsilver -bor $htmlbold),$Nic.description,$htmlwhite))) > $Null
 		}
-		$rowdata += @(,('Connection ID',($htmlsilver -bor $htmlbold),$ThisNic.NetConnectionID,$htmlwhite))
+		$rowdata.Add(@(,('Connection ID',($htmlsilver -bor $htmlbold),$ThisNic.NetConnectionID,$htmlwhite))) > $Null
 		If(validObject $Nic Manufacturer)
 		{
-			$rowdata += @(,('Manufacturer',($htmlsilver -bor $htmlbold),$Nic.manufacturer,$htmlwhite))
+			$rowdata.Add(@(,('Manufacturer',($htmlsilver -bor $htmlbold),$Nic.manufacturer,$htmlwhite))) > $Null
 		}
-		$rowdata += @(,('Availability',($htmlsilver -bor $htmlbold),$xAvailability,$htmlwhite))
-		$rowdata += @(,('Allow the computer to turn off this device to save power',($htmlsilver -bor $htmlbold),$PowerSaving,$htmlwhite))
-		$rowdata += @(,('Physical Address',($htmlsilver -bor $htmlbold),$Nic.macaddress,$htmlwhite))
-		$rowdata += @(,('IP Address',($htmlsilver -bor $htmlbold),$xIPAddress[0],$htmlwhite))
+		$rowdata.Add(@(,('Availability',($htmlsilver -bor $htmlbold),$xAvailability,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Allow the computer to turn off this device to save power',($htmlsilver -bor $htmlbold),$PowerSaving,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Physical Address',($htmlsilver -bor $htmlbold),$Nic.macaddress,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('IP Address',($htmlsilver -bor $htmlbold),$xIPAddress[0],$htmlwhite))) > $Null
 		$cnt = -1
 		ForEach($tmp in $xIPAddress)
 		{
 			$cnt++
 			If($cnt -gt 0)
 			{
-				$rowdata += @(,('IP Address',($htmlsilver -bor $htmlbold),$tmp,$htmlwhite))
+				$rowdata.Add(@(,('IP Address',($htmlsilver -bor $htmlbold),$tmp,$htmlwhite))) > $Null
 			}
 		}
-		$rowdata += @(,('Default Gateway',($htmlsilver -bor $htmlbold),$Nic.Defaultipgateway[0],$htmlwhite))
-		$rowdata += @(,('Subnet Mask',($htmlsilver -bor $htmlbold),$xIPSubnet[0],$htmlwhite))
+		$rowdata.Add(@(,('Default Gateway',($htmlsilver -bor $htmlbold),$Nic.Defaultipgateway[0],$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Subnet Mask',($htmlsilver -bor $htmlbold),$xIPSubnet[0],$htmlwhite))) > $Null
 		$cnt = -1
 		ForEach($tmp in $xIPSubnet)
 		{
 			$cnt++
 			If($cnt -gt 0)
 			{
-				$rowdata += @(,('Subnet Mask',($htmlsilver -bor $htmlbold),$tmp,$htmlwhite))
+				$rowdata.Add(@(,('Subnet Mask',($htmlsilver -bor $htmlbold),$tmp,$htmlwhite))) > $Null
 			}
 		}
 		If($nic.dhcpenabled)
 		{
 			$DHCPLeaseObtainedDate = $nic.ConvertToDateTime($nic.dhcpleaseobtained)
 			$DHCPLeaseExpiresDate = $nic.ConvertToDateTime($nic.dhcpleaseexpires)
-			$rowdata += @(,('DHCP Enabled',($htmlsilver -bor $htmlbold),$Nic.dhcpenabled,$htmlwhite))
-			$rowdata += @(,('DHCP Lease Obtained',($htmlsilver -bor $htmlbold),$dhcpleaseobtaineddate,$htmlwhite))
-			$rowdata += @(,('DHCP Lease Expires',($htmlsilver -bor $htmlbold),$dhcpleaseexpiresdate,$htmlwhite))
-			$rowdata += @(,('DHCP Server',($htmlsilver -bor $htmlbold),$Nic.dhcpserver,$htmlwhite))
+			$rowdata.Add(@(,('DHCP Enabled',($htmlsilver -bor $htmlbold),$Nic.dhcpenabled,$htmlwhite))) > $Null
+			$rowdata.Add(@(,('DHCP Lease Obtained',($htmlsilver -bor $htmlbold),$dhcpleaseobtaineddate,$htmlwhite))) > $Null
+			$rowdata.Add(@(,('DHCP Lease Expires',($htmlsilver -bor $htmlbold),$dhcpleaseexpiresdate,$htmlwhite))) > $Null
+			$rowdata.Add(@(,('DHCP Server',($htmlsilver -bor $htmlbold),$Nic.dhcpserver,$htmlwhite))) > $Null
 		}
 		If(![String]::IsNullOrEmpty($nic.dnsdomain))
 		{
-			$rowdata += @(,('DNS Domain',($htmlsilver -bor $htmlbold),$Nic.dnsdomain,$htmlwhite))
+			$rowdata.Add(@(,('DNS Domain',($htmlsilver -bor $htmlbold),$Nic.dnsdomain,$htmlwhite))) > $Null
 		}
 		If($Null -ne $nic.dnsdomainsuffixsearchorder -and $nic.dnsdomainsuffixsearchorder.length -gt 0)
 		{
-			$rowdata += @(,('DNS Search Suffixes',($htmlsilver -bor $htmlbold),$xnicdnsdomainsuffixsearchorder[0],$htmlwhite))
+			$rowdata.Add(@(,('DNS Search Suffixes',($htmlsilver -bor $htmlbold),$xnicdnsdomainsuffixsearchorder[0],$htmlwhite))) > $Null
 			$cnt = -1
 			ForEach($tmp in $xnicdnsdomainsuffixsearchorder)
 			{
 				$cnt++
 				If($cnt -gt 0)
 				{
-					$rowdata += @(,('',($htmlsilver -bor $htmlbold),$tmp,$htmlwhite))
+					$rowdata.Add(@(,('',($htmlsilver -bor $htmlbold),$tmp,$htmlwhite))) > $Null
 				}
 			}
 		}
-		$rowdata += @(,('DNS WINS Enabled',($htmlsilver -bor $htmlbold),$xdnsenabledforwinsresolution,$htmlwhite))
+		$rowdata.Add(@(,('DNS WINS Enabled',($htmlsilver -bor $htmlbold),$xdnsenabledforwinsresolution,$htmlwhite))) > $Null
 		If($Null -ne $nic.dnsserversearchorder -and $nic.dnsserversearchorder.length -gt 0)
 		{
-			$rowdata += @(,('DNS Servers',($htmlsilver -bor $htmlbold),$xnicdnsserversearchorder[0],$htmlwhite))
+			$rowdata.Add(@(,('DNS Servers',($htmlsilver -bor $htmlbold),$xnicdnsserversearchorder[0],$htmlwhite))) > $Null
 			$cnt = -1
 			ForEach($tmp in $xnicdnsserversearchorder)
 			{
 				$cnt++
 				If($cnt -gt 0)
 				{
-					$rowdata += @(,('',($htmlsilver -bor $htmlbold),$tmp,$htmlwhite))
+					$rowdata.Add(@(,('',($htmlsilver -bor $htmlbold),$tmp,$htmlwhite))) > $Null
 				}
 			}
 		}
-		$rowdata += @(,('NetBIOS Setting',($htmlsilver -bor $htmlbold),$xTcpipNetbiosOptions,$htmlwhite))
-		$rowdata += @(,('WINS: Enabled LMHosts',($htmlsilver -bor $htmlbold),$xwinsenablelmhostslookup,$htmlwhite))
+		$rowdata.Add(@(,('NetBIOS Setting',($htmlsilver -bor $htmlbold),$xTcpipNetbiosOptions,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('WINS: Enabled LMHosts',($htmlsilver -bor $htmlbold),$xwinsenablelmhostslookup,$htmlwhite))) > $Null
 		If(![String]::IsNullOrEmpty($nic.winshostlookupfile))
 		{
-			$rowdata += @(,('Host Lookup File',($htmlsilver -bor $htmlbold),$Nic.winshostlookupfile,$htmlwhite))
+			$rowdata.Add(@(,('Host Lookup File',($htmlsilver -bor $htmlbold),$Nic.winshostlookupfile,$htmlwhite))) > $Null
 		}
 		If(![String]::IsNullOrEmpty($nic.winsprimaryserver))
 		{
-			$rowdata += @(,('Primary Server',($htmlsilver -bor $htmlbold),$Nic.winsprimaryserver,$htmlwhite))
+			$rowdata.Add(@(,('Primary Server',($htmlsilver -bor $htmlbold),$Nic.winsprimaryserver,$htmlwhite))) > $Null
 		}
 		If(![String]::IsNullOrEmpty($nic.winssecondaryserver))
 		{
-			$rowdata += @(,('Secondary Server',($htmlsilver -bor $htmlbold),$Nic.winssecondaryserver,$htmlwhite))
+			$rowdata.Add(@(,('Secondary Server',($htmlsilver -bor $htmlbold),$Nic.winssecondaryserver,$htmlwhite))) > $Null
 		}
 		If(![String]::IsNullOrEmpty($nic.winsscopeid))
 		{
-			$rowdata += @(,('Scope ID',($htmlsilver -bor $htmlbold),$Nic.winsscopeid,$htmlwhite))
+			$rowdata.Add(@(,('Scope ID',($htmlsilver -bor $htmlbold),$Nic.winsscopeid,$htmlwhite))) > $Null
 		}
 
 		$msg = ""
@@ -3270,7 +3273,7 @@ Function AddHTMLTable
 
 	First, initialize the table array
 
-	$rowdata = @()
+	$rowdata = New-Object System.Collections.ArrayList
 
 	Then Load the array.  If you are using column headers then load those into the column headers array, otherwise the first line of the table goes into the column headers array
 	and the second and subsequent lines go into the $rowdata table as shown below:
@@ -3282,19 +3285,19 @@ Function AddHTMLTable
 
 	This is following by adding rowdata as shown below.  As more columns are added the columns will auto adjust to fit the size of the page.
 
-	$rowdata = @()
+	$rowdata = New-Object System.Collections.ArrayList
 	$columnHeaders = @("User Name",($htmlsilver -bor $htmlbold),$UserName,$htmlwhite)
-	$rowdata += @(,('Save as PDF',($htmlsilver -bor $htmlbold),$PDF.ToString(),$htmlwhite))
-	$rowdata += @(,('Save as TEXT',($htmlsilver -bor $htmlbold),$TEXT.ToString(),$htmlwhite))
-	$rowdata += @(,('Save as WORD',($htmlsilver -bor $htmlbold),$MSWORD.ToString(),$htmlwhite))
-	$rowdata += @(,('Save as HTML',($htmlsilver -bor $htmlbold),$HTML.ToString(),$htmlwhite))
-	$rowdata += @(,('Add DateTime',($htmlsilver -bor $htmlbold),$AddDateTime.ToString(),$htmlwhite))
-	$rowdata += @(,('Hardware Inventory',($htmlsilver -bor $htmlbold),$Hardware.ToString(),$htmlwhite))
-	$rowdata += @(,('Computer Name',($htmlsilver -bor $htmlbold),$ComputerName,$htmlwhite))
-	$rowdata += @(,('Filename1',($htmlsilver -bor $htmlbold),$Script:FileName1,$htmlwhite))
-	$rowdata += @(,('OS Detected',($htmlsilver -bor $htmlbold),$Script:RunningOS,$htmlwhite))
-	$rowdata += @(,('PSUICulture',($htmlsilver -bor $htmlbold),$PSCulture,$htmlwhite))
-	$rowdata += @(,('PoSH version',($htmlsilver -bor $htmlbold),$Host.Version.ToString(),$htmlwhite))
+	$rowdata.Add(@(,('Save as PDF',($htmlsilver -bor $htmlbold),$PDF.ToString(),$htmlwhite))) > $Null
+	$rowdata.Add(@(,('Save as TEXT',($htmlsilver -bor $htmlbold),$TEXT.ToString(),$htmlwhite))) > $Null
+	$rowdata.Add(@(,('Save as WORD',($htmlsilver -bor $htmlbold),$MSWORD.ToString(),$htmlwhite))) > $Null
+	$rowdata.Add(@(,('Save as HTML',($htmlsilver -bor $htmlbold),$HTML.ToString(),$htmlwhite))) > $Null
+	$rowdata.Add(@(,('Add DateTime',($htmlsilver -bor $htmlbold),$AddDateTime.ToString(),$htmlwhite))) > $Null
+	$rowdata.Add(@(,('Hardware Inventory',($htmlsilver -bor $htmlbold),$Hardware.ToString(),$htmlwhite))) > $Null
+	$rowdata.Add(@(,('Computer Name',($htmlsilver -bor $htmlbold),$ComputerName,$htmlwhite))) > $Null
+	$rowdata.Add(@(,('Filename1',($htmlsilver -bor $htmlbold),$Script:FileName1,$htmlwhite))) > $Null
+	$rowdata.Add(@(,('OS Detected',($htmlsilver -bor $htmlbold),$Script:RunningOS,$htmlwhite))) > $Null
+	$rowdata.Add(@(,('PSUICulture',($htmlsilver -bor $htmlbold),$PSCulture,$htmlwhite))) > $Null
+	$rowdata.Add(@(,('PoSH version',($htmlsilver -bor $htmlbold),$Host.Version.ToString(),$htmlwhite))) > $Null
 	FormatHTMLTable "Example of Horizontal AutoFitContents HTML Table" -rowArray $rowdata
 
 	The 'rowArray' paramater is mandatory to build the table, but it is not set as such in the function - if nothing is passed, the table will be empty.
@@ -3430,7 +3433,7 @@ Function FormatHTMLTable
 	If($Null -ne $rowArray)
 	{
 		AddHTMLTable $fontName $fontSize -colCount $numCols -rowCount $NumRows -rowInfo $rowArray -fixedInfo $fixedWidth
-		$rowArray = @()
+		$rowArray = New-Object System.Collections.ArrayList
 		$htmlbody = "</table>"
 	}
 	Else
@@ -3643,7 +3646,7 @@ Function AddWordTable
 				If($Null -eq $Columns) 
 				{
 					## Build the available columns from all availble PSCustomObject note properties
-					[string[]] $Columns = @();
+					[string[]] $Columns = New-Object System.Collections.ArrayList;
 					## Add each NoteProperty name to the array
 					ForEach($Property in ($CustomObject | Get-Member -MemberType NoteProperty)) 
 					{ 
@@ -3669,7 +3672,7 @@ Function AddWordTable
 				Write-Debug ("$(Get-Date): `t`tBuilding table rows");
 				ForEach($Object in $CustomObject) 
 				{
-					$OrderedValues = @();
+					$OrderedValues = New-Object System.Collections.ArrayList;
 					## Add each row item in the specified order
 					ForEach($Column in $Columns) 
 					{ 
@@ -3708,7 +3711,7 @@ Function AddWordTable
 				Write-Debug ("$(Get-Date): `t`tBuilding table rows");
 				ForEach($Hash in $Hashtable) 
 				{
-					$OrderedValues = @();
+					$OrderedValues = New-Object System.Collections.ArrayList;
 					## Add each row item in the specified order
 					ForEach($Column in $Columns) 
 					{ 
@@ -4554,7 +4557,7 @@ Function ProcessServices
 		#Replaced with a single call to retrieve services via WMI. The repeated
 		## "Get-WMIObject Win32_Service -Filter" calls were the major delays in the script.
 		## If we need to retrieve the StartUp type might as well just use WMI.
-		$Script:Services = Get-WMIObject Win32_Service -ComputerName $ComputerName -EA 0 | Sort-Object DisplayName
+		$Script:Services = @(Get-WMIObject Win32_Service -ComputerName $ComputerName -EA 0 | Sort-Object DisplayName)
 	}
 
 	Catch
@@ -4598,14 +4601,7 @@ Function ProcessServices
 	}
 	Else
 	{
-		If($Services -is [array])
-		{
-			[int]$Script:NumServices = $Services.count
-		}
-		Else
-		{
-			[int]$Script:NumServices = 1
-		}
+		[int]$Script:NumServices = $Services.count
 		Write-Verbose "$(Get-Date): `t`t$($Script:NumServices) Services found"
 		Return $True
 	}
@@ -4658,9 +4654,9 @@ Function OutputAutoFitHorizontalTable
 		## IB - replacement Services table generation utilising AddWordTable function
 
 		## Create an array of hashtables to store our services
-		[System.Collections.Hashtable[]] $ServicesWordTable = @();
+		$ServicesWordTable = New-Object System.Collections.ArrayList;
 		## Create an array of hashtables to store references of cells that we wish to highlight after the table has been added
-		[System.Collections.Hashtable[]] $HighlightedCells = @();
+		$HighlightedCells = New-Object System.Collections.ArrayList;
 		## Seed the $Services row index from the second row
 		[int] $CurrentServiceIndex = 2;
 	}
@@ -4671,7 +4667,7 @@ Function OutputAutoFitHorizontalTable
 	}
 	ElseIf($HTML)
 	{
-		$rowdata = @()
+		$rowdata = New-Object System.Collections.ArrayList
 	}
 
 	ForEach($Service in $Services) 
@@ -4684,12 +4680,12 @@ Function OutputAutoFitHorizontalTable
 			$WordTableRowHash = @{ DisplayName = $Service.DisplayName; Status = $Service.State; StartMode = $Service.StartMode; }
 
 			## Add the hash to the array
-			$ServicesWordTable += $WordTableRowHash;
+			$ServicesWordTable.Add($WordTableRowHash) > $Null
 
 			## Store "to highlight" cell references
 			If($Service.State -like "Stopped" -and $Service.StartMode -like "Auto") 
 			{
-				$HighlightedCells += @{ Row = $CurrentServiceIndex; Column = 2; }
+				$HighlightedCells.Add(@{ Row = $CurrentServiceIndex; Column = 2; }) > $Null
 			}
 			$CurrentServiceIndex++;
 		}
@@ -4710,7 +4706,7 @@ Function OutputAutoFitHorizontalTable
 			{
 				$HighlightedCells = $htmlwhite
 			} 
-			$rowdata += @(,($Service.DisplayName,$htmlwhite,$Service.State,$HighlightedCells,$Service.StartMode,$htmlwhite))
+			$rowdata.Add(@(,($Service.DisplayName,$htmlwhite,$Service.State,$HighlightedCells,$Service.StartMode,$htmlwhite))) > $Null
 		}
 	}
 
@@ -4763,9 +4759,9 @@ Function OutputAutoFitHorizontalTableNoInternalGridLines
 		## IB - replacement Services table generation utilising AddWordTable function
 
 		## Create an array of hashtables to store our services
-		[System.Collections.Hashtable[]] $ServicesWordTable = @();
+		$ServicesWordTable = New-Object System.Collections.ArrayList;
 		## Create an array of hashtables to store references of cells that we wish to highlight after the table has been added
-		[System.Collections.Hashtable[]] $HighlightedCells = @();
+		$HighlightedCells = New-Object System.Collections.ArrayList;
 		## Seed the $Services row index from the second row
 		[int] $CurrentServiceIndex = 2;
 	}
@@ -4780,12 +4776,12 @@ Function OutputAutoFitHorizontalTableNoInternalGridLines
 			$WordTableRowHash = @{ DisplayName = $Service.DisplayName; Status = $Service.State; StartMode = $Service.StartMode; }
 
 			## Add the hash to the array
-			$ServicesWordTable += $WordTableRowHash;
+			$ServicesWordTable.Add($WordTableRowHash) > $Null
 
 			## Store "to highlight" cell references
 			If($Service.State -like "Stopped" -and $Service.StartMode -like "Auto") 
 			{
-				$HighlightedCells += @{ Row = $CurrentServiceIndex; Column = 2; }
+				$HighlightedCells.Add(@{ Row = $CurrentServiceIndex; Column = 2; }) > $Null
 			}
 			$CurrentServiceIndex++;
 		}
@@ -4828,9 +4824,9 @@ Function OutputAutoFitHorizontalTableNoGridLines
 		## IB - replacement Services table generation utilising AddWordTable function
 
 		## Create an array of hashtables to store our services
-		[System.Collections.Hashtable[]] $ServicesWordTable = @();
+		$ServicesWordTable = New-Object System.Collections.ArrayList;
 		## Create an array of hashtables to store references of cells that we wish to highlight after the table has been added
-		[System.Collections.Hashtable[]] $HighlightedCells = @();
+		$HighlightedCells = New-Object System.Collections.ArrayList;
 		## Seed the $Services row index from the second row
 		[int] $CurrentServiceIndex = 2;
 	}
@@ -4845,12 +4841,12 @@ Function OutputAutoFitHorizontalTableNoGridLines
 			$WordTableRowHash = @{ DisplayName = $Service.DisplayName; Status = $Service.State; StartMode = $Service.StartMode; }
 
 			## Add the hash to the array
-			$ServicesWordTable += $WordTableRowHash;
+			$ServicesWordTable.Add($WordTableRowHash) > $Null
 
 			## Store "to highlight" cell references
 			If($Service.State -like "Stopped" -and $Service.StartMode -like "Auto") 
 			{
-				$HighlightedCells += @{ Row = $CurrentServiceIndex; Column = 2; }
+				$HighlightedCells.Add(@{ Row = $CurrentServiceIndex; Column = 2; }) > $Null
 			}
 			$CurrentServiceIndex++;
 		}
@@ -4913,9 +4909,9 @@ Function OutputFixedWidthHorizontalTable
 		## IB - replacement Services table generation utilising AddWordTable function
 
 		## Create an array of hashtables to store our services
-		[System.Collections.Hashtable[]] $ServicesWordTable = @();
+		$ServicesWordTable = New-Object System.Collections.ArrayList;
 		## Create an array of hashtables to store references of cells that we wish to highlight after the table has been added
-		[System.Collections.Hashtable[]] $HighlightedCells = @();
+		$HighlightedCells = New-Object System.Collections.ArrayList;
 		## Seed the $Services row index from the second row
 		[int] $CurrentServiceIndex = 2;
 	}
@@ -4948,12 +4944,12 @@ Function OutputFixedWidthHorizontalTable
 			$WordTableRowHash = @{ DisplayName = $Service.DisplayName; Status = $Service.State; StartMode = $Service.StartMode; }
 
 			## Add the hash to the array
-			$ServicesWordTable += $WordTableRowHash;
+			$ServicesWordTable.Add($WordTableRowHash) > $Null
 
 			## Store "to highlight" cell references
 			If($Service.State -like "Stopped" -and $Service.StartMode -like "Auto") 
 			{
-				$HighlightedCells += @{ Row = $CurrentServiceIndex; Column = 2; }
+				$HighlightedCells.Add(@{ Row = $CurrentServiceIndex; Column = 2; }) > $Null
 			}
 			$CurrentServiceIndex++;
 		}
@@ -5017,38 +5013,38 @@ Function ProcessScriptInformation
 	## IB - Build Script information
 	Write-Verbose "$(Get-Date): `tBuilding script information"
 	
-	[System.Collections.Hashtable[]] $Script:ScriptInformation = @()
+	$Script:ScriptInformation = New-Object System.Collections.ArrayList
 
 	#if stmt added 7-Dec-2017
 	If($MSWORD -or $PDF)
 	{
-		$Script:ScriptInformation += @{ Data = "Company Name"; Value = $Script:CoName; }
-		$Script:ScriptInformation += @{ Data = "Company Address"; Value = $CompanyAddress; } #added 7-Dec-2017
-		$Script:ScriptInformation += @{ Data = "Company Email"; Value = $CompanyEmail; } #added 7-Dec-2017
-		$Script:ScriptInformation += @{ Data = "Company Fax"; Value = $CompanyFax; } #added 7-Dec-2017
-		$Script:ScriptInformation += @{ Data = "Company Phone"; Value = $CompanyPhone; } #added 7-Dec-2017
-		$Script:ScriptInformation += @{ Data = "Cover Page"; Value = $CoverPage; }
-		$Script:ScriptInformation += @{ Data = "User Name"; Value = $UserName; }
-		$Script:ScriptInformation += @{ Data = "Save as PDF"; Value = $PDF; }
-		$Script:ScriptInformation += @{ Data = "Save as TEXT"; Value = $TEXT; }
-		$Script:ScriptInformation += @{ Data = "Save as WORD"; Value = $MSWORD; }
-		$Script:ScriptInformation += @{ Data = "Save as HTML"; Value = $HTML; }
-		$Script:ScriptInformation += @{ Data = "Add DateTime"; Value = $AddDateTime; }
-		$Script:ScriptInformation += @{ Data = "Hardware Inventory"; Value = $Hardware; }
-		$Script:ScriptInformation += @{ Data = "Computer Name"; Value = $ComputerName; }
-		$Script:ScriptInformation += @{ Data = "Title"; Value = $Script:Title; }
-		$Script:ScriptInformation += @{ Data = "Filename1"; Value = $Script:FileName1; }
+		$Script:ScriptInformation.Add(@{ Data = "Company Name"; Value = $Script:CoName; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Company Address"; Value = $CompanyAddress; })  > $Null #added 7-Dec-2017
+		$Script:ScriptInformation.Add(@{ Data = "Company Email"; Value = $CompanyEmail; })  > $Null #added 7-Dec-2017
+		$Script:ScriptInformation.Add(@{ Data = "Company Fax"; Value = $CompanyFax; })  > $Null #added 7-Dec-2017
+		$Script:ScriptInformation.Add(@{ Data = "Company Phone"; Value = $CompanyPhone; })  > $Null #added 7-Dec-2017
+		$Script:ScriptInformation.Add(@{ Data = "Cover Page"; Value = $CoverPage; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "User Name"; Value = $UserName; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Save as PDF"; Value = $PDF; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Save as TEXT"; Value = $TEXT; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Save as WORD"; Value = $MSWORD; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Save as HTML"; Value = $HTML; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Add DateTime"; Value = $AddDateTime; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Hardware Inventory"; Value = $Hardware; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Computer Name"; Value = $ComputerName; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Title"; Value = $Script:Title; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Filename1"; Value = $Script:FileName1; }) > $Null
 		## IB - We only need Filename2 if it's a PDF (and we're no longer worried about the number of rows!)
 		If($PDF) 
 		{ 
-			$Script:ScriptInformation += @{ Data = "Filename2"; Value = $Script:Filename2; } 
+			$Script:ScriptInformation.Add(@{ Data = "Filename2"; Value = $Script:Filename2; })  > $Null
 		}
-		$Script:ScriptInformation += @{ Data = "OS Detected"; Value = $Script:RunningOS; }
-		$Script:ScriptInformation += @{ Data = "PSUICulture"; Value = $PSUICulture; }
-		$Script:ScriptInformation += @{ Data = "PSCulture"; Value = $PSCulture; }
-		$Script:ScriptInformation += @{ Data = "Word version"; Value = $WordProduct; }
-		$Script:ScriptInformation += @{ Data = "Word language"; Value = $WordLanguageValue; }
-		$Script:ScriptInformation += @{ Data = "PoSH version"; Value = $Host.Version; }
+		$Script:ScriptInformation.Add(@{ Data = "OS Detected"; Value = $Script:RunningOS; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "PSUICulture"; Value = $PSUICulture; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "PSCulture"; Value = $PSCulture; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Word version"; Value = $WordProduct; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "Word language"; Value = $WordLanguageValue; }) > $Null
+		$Script:ScriptInformation.Add(@{ Data = "PoSH version"; Value = $Host.Version; }) > $Null
 	}
 }
 
@@ -5097,19 +5093,19 @@ Function OutputAutoFitVerticalTable
 	ElseIf($HTML)
 	{
 		WriteHTMLLine 0 0 ""
-		$rowdata = @()
+		$rowdata = New-Object System.Collections.ArrayList
 		$columnHeaders = @("User Name",($htmlsilver -bor $htmlbold),$UserName,$htmlwhite)
-		$rowdata += @(,('Save as PDF',($htmlsilver -bor $htmlbold),$PDF.ToString(),$htmlwhite))
-		$rowdata += @(,('Save as TEXT',($htmlsilver -bor $htmlbold),$TEXT.ToString(),$htmlwhite))
-		$rowdata += @(,('Save as WORD',($htmlsilver -bor $htmlbold),$MSWORD.ToString(),$htmlwhite))
-		$rowdata += @(,('Save as HTML',($htmlsilver -bor $htmlbold),$HTML.ToString(),$htmlwhite))
-		$rowdata += @(,('Add DateTime',($htmlsilver -bor $htmlbold),$AddDateTime.ToString(),$htmlwhite))
-		$rowdata += @(,('Hardware Inventory',($htmlsilver -bor $htmlbold),$Hardware.ToString(),$htmlwhite))
-		$rowdata += @(,('Computer Name',($htmlsilver -bor $htmlbold),$ComputerName,$htmlwhite))
-		$rowdata += @(,('Filename1',($htmlsilver -bor $htmlbold),$Script:FileName1,$htmlwhite))
-		$rowdata += @(,('OS Detected',($htmlsilver -bor $htmlbold),$Script:RunningOS,$htmlwhite))
-		$rowdata += @(,('PSUICulture',($htmlsilver -bor $htmlbold),$PSCulture,$htmlwhite))
-		$rowdata += @(,('PoSH version',($htmlsilver -bor $htmlbold),$Host.Version.ToString(),$htmlwhite))
+		$rowdata.Add(@(,('Save as PDF',($htmlsilver -bor $htmlbold),$PDF.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Save as TEXT',($htmlsilver -bor $htmlbold),$TEXT.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Save as WORD',($htmlsilver -bor $htmlbold),$MSWORD.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Save as HTML',($htmlsilver -bor $htmlbold),$HTML.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Add DateTime',($htmlsilver -bor $htmlbold),$AddDateTime.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Hardware Inventory',($htmlsilver -bor $htmlbold),$Hardware.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Computer Name',($htmlsilver -bor $htmlbold),$ComputerName,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Filename1',($htmlsilver -bor $htmlbold),$Script:FileName1,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('OS Detected',($htmlsilver -bor $htmlbold),$Script:RunningOS,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('PSUICulture',($htmlsilver -bor $htmlbold),$PSCulture,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('PoSH version',($htmlsilver -bor $htmlbold),$Host.Version.ToString(),$htmlwhite))) > $Null
 		FormatHTMLTable "Example of Horizontal AutoFitContents HTML Table" "auto" -rowArray $rowdata -columnArray $columnHeaders
 		WriteHTMLLine 0 0 ""
 	}
@@ -5155,19 +5151,19 @@ Function OutputFixedWidthVerticalTable
 	}
 	ElseIf($HTML)
 	{
-		$rowdata = @()
+		$rowdata = New-Object System.Collections.ArrayList
 		$columnHeaders = @("User Name",($htmlsilver -bor $htmlbold),$UserName,$htmlwhite)
-		$rowdata += @(,('Save as PDF',($htmlsilver -bor $htmlbold),$PDF.ToString(),$htmlwhite))
-		$rowdata += @(,('Save as TEXT',($htmlsilver -bor $htmlbold),$TEXT.ToString(),$htmlwhite))
-		$rowdata += @(,('Save as WORD',($htmlsilver -bor $htmlbold),$MSWORD.ToString(),$htmlwhite))
-		$rowdata += @(,('Save as HTML',($htmlsilver -bor $htmlbold),$HTML.ToString(),$htmlwhite))
-		$rowdata += @(,('Add DateTime',($htmlsilver -bor $htmlbold),$AddDateTime.ToString(),$htmlwhite))
-		$rowdata += @(,('Hardware Inventory',($htmlsilver -bor $htmlbold),$Hardware.ToString(),$htmlwhite))
-		$rowdata += @(,('Computer Name',($htmlsilver -bor $htmlbold),$ComputerName,$htmlwhite))
-		$rowdata += @(,('Filename1',($htmlsilver -bor $htmlbold),$Script:FileName1,$htmlwhite))
-		$rowdata += @(,('OS Detected',($htmlsilver -bor $htmlbold),$Script:RunningOS,$htmlwhite))
-		$rowdata += @(,('PSUICulture',($htmlsilver -bor $htmlbold),$PSCulture,$htmlwhite))
-		$rowdata += @(,('PoSH version',($htmlsilver -bor $htmlbold),$Host.Version.ToString(),$htmlwhite))
+		$rowdata.Add(@(,('Save as PDF',($htmlsilver -bor $htmlbold),$PDF.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Save as TEXT',($htmlsilver -bor $htmlbold),$TEXT.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Save as WORD',($htmlsilver -bor $htmlbold),$MSWORD.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Save as HTML',($htmlsilver -bor $htmlbold),$HTML.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Add DateTime',($htmlsilver -bor $htmlbold),$AddDateTime.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Hardware Inventory',($htmlsilver -bor $htmlbold),$Hardware.ToString(),$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Computer Name',($htmlsilver -bor $htmlbold),$ComputerName,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('Filename1',($htmlsilver -bor $htmlbold),$Script:FileName1,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('OS Detected',($htmlsilver -bor $htmlbold),$Script:RunningOS,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('PSUICulture',($htmlsilver -bor $htmlbold),$PSCulture,$htmlwhite))) > $Null
+		$rowdata.Add(@(,('PoSH version',($htmlsilver -bor $htmlbold),$Host.Version.ToString(),$htmlwhite))) > $Null
 		FormatHTMLTable "Example of Horizontal Fixed Width HTML Table" -tablewidth "370" -rowArray $rowdata -columnArray $columnHeaders
 	}
 }
